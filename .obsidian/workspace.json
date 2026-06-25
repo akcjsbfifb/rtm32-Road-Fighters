@@ -218,21 +218,23 @@
       "bases:Create new base": false
     }
   },
-  "active": "d087c4a24091b567",
+  "active": "fc04a09a83fdecde",
   "lastOpenFiles": [
-    "rtm32.pdf",
+    "AI-PROMPT.md",
+    "tests/README.md",
+    "tests/test_j_jal.bin",
+    "tests/test_mul_div.bin",
+    "tests/test_indexed.bin",
+    "tests/test_slti.bin",
+    "tests/test_jr_jalr.bin",
+    "tests/test_branches.bin",
+    "tests/test_lui.bin",
+    "tests/test_itype_high.bin",
+    "tests/test_itype_alu.bin",
+    "tests/test_rtype_shifts.bin",
     "RTM32-guia.md",
     "README.md",
     "mostrar_h/explicacion_mostrar_h.md",
-    "hello_world/hello.bin",
-    "hello_world/hello.asm",
-    "hello_world",
-    "RTM32-encoding.md",
-    "mostrar_h/mostrar_h.bin",
-    "mostrar_h/mostrar_h.asm",
-    "mostrar_h/asm.py",
-    "mostrar_h",
-    "asm.py",
-    "hello.asm"
+    "RTM32-encoding.md"
   ]
 }
