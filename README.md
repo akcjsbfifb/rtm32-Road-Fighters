@@ -80,6 +80,8 @@ od -A x -t x1 -w4 -j60 hello_world/hello.bin
 python3 asm.py --dis hello_world/hello.bin
 ```
 
-## Para otra IA / futuro yo
+## Utilidades
 
-Si otra IA o persona necesita usar esto, que lea las 3 guías en orden, ejecute `python3 asm.py` para ver los opcodes, y mire los ejemplos en `mostrar_h/` y `hello_world/`. El formato de snapshot está documentado en `RTM32-guia.md` sección 4.
+```bash
+pkill xterm   # cerrar terminales abiertas por el emulador
+```
