@@ -6,6 +6,7 @@
       {
         "id": "d6f0e4fc4cac3024",
         "type": "tabs",
+        "dimension": 47.85100286532951,
         "children": [
           {
             "id": "d087c4a24091b567",
@@ -48,11 +49,12 @@
             }
           }
         ],
-        "currentTab": 2
+        "currentTab": 1
       },
       {
         "id": "a74280313710862d",
         "type": "tabs",
+        "dimension": 52.14899713467048,
         "children": [
           {
             "id": "66eaf8120653193e",
@@ -67,8 +69,21 @@
               "icon": "lucide-file",
               "title": "MIS_TESTS"
             }
+          },
+          {
+            "id": "a7c0b0b34bb4f6b7",
+            "type": "leaf",
+            "state": {
+              "type": "pdf",
+              "state": {
+                "file": "rtm32v2.pdf"
+              },
+              "icon": "lucide-file-text",
+              "title": "rtm32v2"
+            }
           }
-        ]
+        ],
+        "currentTab": 1
       }
     ],
     "direction": "vertical"
@@ -125,7 +140,8 @@
       }
     ],
     "direction": "horizontal",
-    "width": 300
+    "width": 300,
+    "collapsed": true
   },
   "right": {
     "id": "64900e1779739ed9",
@@ -141,7 +157,7 @@
             "state": {
               "type": "backlink",
               "state": {
-                "file": "rtm32.pdf",
+                "file": "rtm32v2.pdf",
                 "collapseAll": false,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -151,7 +167,7 @@
                 "unlinkedCollapsed": true
               },
               "icon": "links-coming-in",
-              "title": "Backlinks for rtm32"
+              "title": "Backlinks for rtm32v2"
             }
           },
           {
@@ -230,11 +246,17 @@
       "bases:Create new base": false
     }
   },
-  "active": "5a80cc01be0d307a",
+  "active": "a7c0b0b34bb4f6b7",
   "lastOpenFiles": [
     "tests/MIS_TESTS.md",
-    "rtm32.pdf",
+    "rtm32v2.pdf",
+    "tests/PROMPT_PARA_IA.md",
     "tests/GUIA_TESTING.md",
+    "rtm32.pdf",
+    "tests/MIS_TESTS.md.bak",
+    "rtm32.bak",
+    "rtm32v2.s",
+    "rtm32v2",
     "README.md",
     "terminal-wrapper.md",
     "AI-PROMPT.md",
@@ -243,11 +265,6 @@
     "tests/test_mul_div.bin",
     "tests/test_indexed.bin",
     "tests/test_slti.bin",
-    "tests/test_jr_jalr.bin",
-    "tests/test_branches.bin",
-    "tests/test_lui.bin",
-    "tests/test_itype_high.bin",
-    "tests/test_itype_alu.bin",
     "RTM32-guia.md",
     "mostrar_h/explicacion_mostrar_h.md",
     "RTM32-encoding.md"
