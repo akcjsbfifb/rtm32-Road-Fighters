@@ -20,43 +20,55 @@
               "icon": "lucide-file",
               "title": "README"
             }
-          }
-        ]
-      },
-      {
-        "id": "29edc4e5a9764b19",
-        "type": "tabs",
-        "children": [
+          },
           {
-            "id": "480af137ced63911",
+            "id": "1b194012f2aa6974",
             "type": "leaf",
             "state": {
               "type": "markdown",
               "state": {
-                "file": "RTM32-guia.md",
+                "file": "tests/GUIA_TESTING.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "RTM32-guia"
+              "title": "GUIA_TESTING"
             }
           },
           {
-            "id": "4b07b97e69194b2e",
+            "id": "5a80cc01be0d307a",
+            "type": "leaf",
+            "state": {
+              "type": "pdf",
+              "state": {
+                "file": "rtm32.pdf"
+              },
+              "icon": "lucide-file-text",
+              "title": "rtm32"
+            }
+          }
+        ],
+        "currentTab": 2
+      },
+      {
+        "id": "a74280313710862d",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "66eaf8120653193e",
             "type": "leaf",
             "state": {
               "type": "markdown",
               "state": {
-                "file": "RTM32-guia.md",
+                "file": "tests/MIS_TESTS.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "RTM32-guia"
+              "title": "MIS_TESTS"
             }
           }
-        ],
-        "currentTab": 1
+        ]
       }
     ],
     "direction": "vertical"
@@ -129,7 +141,7 @@
             "state": {
               "type": "backlink",
               "state": {
-                "file": "README.md",
+                "file": "rtm32.pdf",
                 "collapseAll": false,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -139,7 +151,7 @@
                 "unlinkedCollapsed": true
               },
               "icon": "links-coming-in",
-              "title": "Backlinks for README"
+              "title": "Backlinks for rtm32"
             }
           },
           {
@@ -218,8 +230,13 @@
       "bases:Create new base": false
     }
   },
-  "active": "fc04a09a83fdecde",
+  "active": "5a80cc01be0d307a",
   "lastOpenFiles": [
+    "tests/MIS_TESTS.md",
+    "rtm32.pdf",
+    "tests/GUIA_TESTING.md",
+    "README.md",
+    "terminal-wrapper.md",
     "AI-PROMPT.md",
     "tests/README.md",
     "tests/test_j_jal.bin",
@@ -231,9 +248,7 @@
     "tests/test_lui.bin",
     "tests/test_itype_high.bin",
     "tests/test_itype_alu.bin",
-    "tests/test_rtype_shifts.bin",
     "RTM32-guia.md",
-    "README.md",
     "mostrar_h/explicacion_mostrar_h.md",
     "RTM32-encoding.md"
   ]
