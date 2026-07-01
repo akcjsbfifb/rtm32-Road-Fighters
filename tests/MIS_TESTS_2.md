@@ -2,33 +2,31 @@
 
 ---
 
-## Caso 1:
+## Caso 1: ADD
 
-### Descripción
-Testeando ADD
-### Instrucciones
-- ADD r1, r2, r3
-### Precondiciones
+### Instrucción
+ADD r1, r2, r3
+
+### Encode
+
+|       | 31-27  | 26-22 | 21-17 | 16-12 | 11-7  | 6-5 | 4-0   |
+| ----- | ------ | ----- | ----- | ----- | ----- | --- | ----- |
+| Campo | opcode | rs    | rt    | rd    | aux   | X   | func  |
+| Valor | 00000  | 00010 | 00011 | 00001 | 00000 | 00  | 11100 |
+| Hex   | 0      | 2     | 3     | 1     | 0     | 0   | 1C    |
+
+s [0x0] 0x0086101C
+
+### Setup
 set pc 0
 s r2 5
 s r3 7
 
-### Code
-s [0x0] 0x0086101C 
-00000 opcode 
-00010 $2
-00011 $3
-00001 $1
-000000 aux
-funct 011100  (add)
-    ,       ,        ,        ,       ,        ,        ,    
-00000 00010 00011 00001 00000 0011100
-0        0       8         6      1       0       1      C 
-### Postcondiciones
-R 1: 0x0000000C   R 2: 0x00000005   R 3: 0x00000007
-5 + 7 = 12 = 0xC
-### Conclusiones
-ADD funciona correctamente, suma $2 + $3 y guarda en $1.
+### Resultado
+R1: 0x0000000C   R2: 0x00000005   R3: 0x00000007
+5 + 7 = 12 0xC
+
+**Pasa** — ADD suma $2 + $3 correctamente y guarda en $1.
 
 
 ---
@@ -44,22 +42,22 @@ ADD funciona correctamente, suma $2 + $3 y guarda en $1.
 - set r2, 5
 
 ### Code
-s [0x0] 0x08410005
+s [0x0] 0xC0820005
 
-00001 opcode
+11000 opcode
 00010 $2
 00001 $1
 0,0000,0000,0000,0101 (imm 5 en 17 bits.)
 
-0000, 1000, 0100, 0001, 0000, 0000, 0000, 0101
-   0        8         4        1        0       0         0       5
+1100, 0000, 1000, 0010, 0000, 0000, 0000,0101
+C          0          8      2          0       0         0      5
 
 ### Postcondiciones
-- R[ 1]: 0x00000000   R[ 2]: 0x00000005
-- R1 debería ser 0xA (5 + 5) pero quedó en 0x0
+- R[ 1]: 0x0000000A   R[ 2]: 0x00000005
+- 5 + 5 = 10 = 0xA
 
 ### Conclusiones
-❌ **Falla** — El emulador (versión anterior al PDF v2) no reconoce el opcode 00001. Se requiere el binario actualizado que implemente la ISA de rtm32v2.pdf.
+addi funciona correctamente, le suma el valor en imm al primer registro y lo guarda en el segundo
 
 
 ---
@@ -1348,7 +1346,7 @@ s r2 0
 ### Code
 s [0x0] 0x30839ABC
 
-00110  opcode (XORI asumido = 0x06)
+00110 opcode (XORI asumido = 0x06)
 00010 $2
 00001 $1
 1,1001,1010,1011,1100 (imm[16]=1, imm[15:0]=0x9ABC)
@@ -1406,7 +1404,7 @@ TOMADO:     PC=0x00000008, r4=0x0000001E (30)
 NO TOMADO:  PC=0x00000004, r4=0x00000000
 
 ### Conclusiones
-BEQ: r1 = `r2 → salta a 0x8. r1!=r2 → sigue a 0x4.
+BEQ: r1==r2 → salta a 0x8. r1!=r2 → sigue a 0x4.
 
 
 ---
@@ -1425,8 +1423,8 @@ s [0x8] 0x014C401C
 s r5 10
 s r6 20
 [setear r1,r2 según caso]
-### Code
 
+### Code
 s [0x0] 0x88440001
 
 10001 opcode (BNE = 0x11)
@@ -1439,10 +1437,10 @@ s [0x0] 0x88440001
 
 ### Postcondiciones
 TOMADO:     PC=0x08, r4=30  (r1!=r2 → true)
-NO TOMADO:  PC=0x04, r4=0   (r1  = r2 → false)
+NO TOMADO:  PC=0x04, r4=0   (r1==r2 → false)
 
 ### Conclusiones
-BNE: r1!=r2 → salta. r1 = r2 → no salta.
+BNE: r1!=r2 → salta. r1==r2 → no salta.
 
 
 ---
