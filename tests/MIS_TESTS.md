@@ -443,6 +443,42 @@ SLTU sin signo: 0xFFFFFFFF no es < 1 → r1 = 0.
 
 ---
 
+## Caso 12b: SLTU (caso contrario)
+
+### Descripción
+Set Less Than Unsigned — caso donde SÍ da true. 1 < 5 sin signo.
+
+### Instrucciones
+- SLTU r1, r2, r3
+
+### Precondiciones
+set pc 0
+s r2 1
+s r3 5
+
+### Code
+s [0x0] 0x0086100D
+
+00000 opcode
+00010 $2
+00011 $3
+00001 $1
+00000 aux
+0001101 funct (SLTU = 0x0D)
+
+0000, 0000, 1000, 0110, 0001, 0000, 0000, 1101
+   0        0        8       6        1        0       0         D
+
+### Postcondiciones
+R 1: 0x00000001   R 2: 0x00000001   R 3: 0x00000005
+Unsigned: 1 < 5 → true → 1
+
+### Conclusiones
+SLTU sin signo: 1 < 5 → r1 = 1, confirma que SLTU funciona para el caso true.
+
+
+---
+
 ## Caso 13: SLTI
 
 ### Descripción
@@ -476,6 +512,39 @@ SLTI: 5 < 10 signado → r1 = 1.
 
 ---
 
+## Caso 13b: SLTI (caso contrario)
+
+### Descripción
+Set Less Than Immediate — caso donde SÍ da false. 15 < 10 signado → false.
+
+### Instrucciones
+- SLTI r1, r2, 10
+
+### Precondiciones
+set pc 0
+s r2 15
+
+### Code
+s [0x0] 0xB082000A
+
+10110 opcode (SLTI = 0x16)
+00010 $2
+00001 $1
+0,0000,0000,0000,1010 (imm 10)
+
+1011, 0000, 1000, 0010, 0000, 0000, 0000, 1010
+   B        0        8        2        0        0       0         A
+
+### Postcondiciones
+R 1: 0x00000000   R 2: 0x0000000F
+15 < 10 signed → false → 0
+
+### Conclusiones
+SLTI: 15 no es < 10 signado → r1 = 0. Confirma que SLTI funciona para el caso false.
+
+
+---
+
 ## Caso 14: SLTIU
 
 ### Descripción
@@ -505,6 +574,39 @@ Unsigned: 0xFFFFFFFF < 1 → false → 0
 
 ### Conclusiones
 SLTIU: 0xFFFFFFFF no es < 1 sin signo. Inmediato zero-extend.
+
+
+---
+
+## Caso 14b: SLTIU (caso contrario)
+
+### Descripción
+Set Less Than Immediate Unsigned — caso donde SÍ da true. 3 < 10 sin signo.
+
+### Instrucciones
+- SLTIU r1, r2, 10
+
+### Precondiciones
+set pc 0
+s r2 3
+
+### Code
+s [0x0] 0xB882000A
+
+10111 opcode (SLTIU = 0x17)
+00010 $2
+00001 $1
+0,0000,0000,0000,1010 (imm 10)
+
+1011, 1000, 1000, 0010, 0000, 0000, 0000, 1010
+   B        8        8        2        0       0        0        A
+
+### Postcondiciones
+R 1: 0x00000001   R 2: 0x00000003
+Unsigned: 3 < 10 → true → 1
+
+### Conclusiones
+SLTIU: 3 < 10 sin signo → r1 = 1. Confirma que SLTIU funciona para el caso true.
 
 
 ---
@@ -544,6 +646,41 @@ SLL: 3 << 4 = 48 correcto.
 
 ---
 
+## Caso 15b: SLL (variante con otro valor)
+
+### Descripción
+Shift Left Logical — mismo shift de 4, distinto operando. 7 << 4.
+
+### Instrucciones
+- SLL r1, r2, 4
+
+### Precondiciones
+set pc 0
+s r2 7
+
+### Code
+s [0x0] 0x00041200
+
+00000 opcode (R-type)
+00000 rs (no usado)
+00010 $2 (rt: fuente)
+00001 $1 (rd: destino)
+00100 aux (4: shift amount)
+0000000 funct (SLL = 0x00)
+
+0000, 0000, 0000, 0100, 0001, 0010, 0000, 0000
+   0        0        0        4        1        2       0        0
+
+### Postcondiciones
+R 1: 0x00000070   R 2: 0x00000007
+7 << 4 = 112 = 0x70
+
+### Conclusiones
+SLL: 7 << 4 = 112 correcto. Confirma SLL con otro operando.
+
+
+---
+
 ## Caso 16: SRL
 
 ### Descripción
@@ -579,6 +716,41 @@ SRL: 0x80 >> 4 = 8 correcto.
 
 ---
 
+## Caso 16b: SRL (variante con otro valor)
+
+### Descripción
+Shift Right Logical — mismo shift de 4, distinto operando. 0xFF >> 4.
+
+### Instrucciones
+- SRL r1, r2, 4
+
+### Precondiciones
+set pc 0
+s r2 0xFF
+
+### Code
+s [0x0] 0x00041201
+
+00000 opcode
+00000 rs
+00010 $2 (rt)
+00001 $1 (rd)
+00100 aux (4)
+0000001 funct (SRL = 0x01)
+
+0000, 0000, 0000, 0100, 0001, 0010, 0000, 0001
+   0        0        0        4        1        2       0        1
+
+### Postcondiciones
+R 1: 0x0000000F   R 2: 0x000000FF
+0xFF >> 4 = 15 = 0x0F
+
+### Conclusiones
+SRL: 0xFF >> 4 = 15 correcto. Confirma SRL con otro operando.
+
+
+---
+
 ## Caso 17: SRA
 
 ### Descripción
@@ -610,6 +782,41 @@ R 1: 0xF8000000   R 2: 0x80000000
 
 ### Conclusiones
 SRA con signo: 0x80000000 >> 4 = 0xF8000000 (bits altos en 1).
+
+
+---
+
+## Caso 17b: SRA (variante con valor positivo)
+
+### Descripción
+Shift Right Arithmetic con número positivo — rellena con 0s porque bit 31=0.
+
+### Instrucciones
+- SRA r1, r2, 4
+
+### Precondiciones
+set pc 0
+s r2 0x40000000
+
+### Code
+s [0x0] 0x00041202
+
+00000 opcode
+00000 rs
+00010 $2 (rt)
+00001 $1 (rd)
+00100 aux (4)
+0000010 funct (SRA = 0x02)
+
+0000, 0000, 0000, 0100, 0001, 0010, 0000, 0010
+   0        0        0        4        1        2       0        2
+
+### Postcondiciones
+R 1: 0x04000000   R 2: 0x40000000
+0x40000000 (positivo) >>> 4 = 0x04000000 (bits altos en 0)
+
+### Conclusiones
+SRA con valor positivo: rellena con 0s correctamente. Contraste con 0x80000000 que rellena con 1s.
 
 
 ---
@@ -651,6 +858,42 @@ SLLR: shift amount desde $3, correcto.
 
 ---
 
+## Caso 18b: SLLR (variante con otro shift)
+
+### Descripción
+Shift Left Logical Register — 5 << 2 = 20, shift amount desde $3.
+
+### Instrucciones
+- SLLR r1, r2, r3
+
+### Precondiciones
+set pc 0
+s r2 5
+s r3 2
+
+### Code
+s [0x0] 0x00C41003
+
+00000 opcode
+00011 $3 (rs: shift amount)
+00010 $2 (rt: fuente)
+00001 $1 (rd: destino)
+00000 aux
+0000011 funct (SLLR = 0x03)
+
+0000, 0000, 1100, 0100, 0001, 0000, 0000, 0011
+   0        0        C        4        1        0       0        3
+
+### Postcondiciones
+R 1: 0x00000014   R 2: 0x00000005   R 3: 0x00000002
+5 << 2 = 20 = 0x14
+
+### Conclusiones
+SLLR: 5 << 2 = 20 correcto. Confirma SLLR con otro shift amount.
+
+
+---
+
 ## Caso 19: SRLR
 
 ### Descripción
@@ -683,6 +926,42 @@ R 1: 0x00000008   R 2: 0x00000080   R 3: 0x00000004
 
 ### Conclusiones
 SRLR correcto.
+
+
+---
+
+## Caso 19b: SRLR (variante con otro valor)
+
+### Descripción
+Shift Right Logical Register — 0xFF >> 4 = 15, shift amount desde $3.
+
+### Instrucciones
+- SRLR r1, r2, r3
+
+### Precondiciones
+set pc 0
+s r2 0xFF
+s r3 4
+
+### Code
+s [0x0] 0x00C41004
+
+00000 opcode
+00011 $3 (rs)
+00010 $2 (rt)
+00001 $1 (rd)
+00000 aux
+0000100 funct (SRLR = 0x04)
+
+0000, 0000, 1100, 0100, 0001, 0000, 0000, 0100
+   0        0        C        4        1        0       0        4
+
+### Postcondiciones
+R 1: 0x0000000F   R 2: 0x000000FF   R 3: 0x00000004
+0xFF >> 4 = 15
+
+### Conclusiones
+SRLR: 0xFF >> 4 = 15 correcto. Confirma SRLR con otro operando.
 
 
 ---
@@ -720,6 +999,43 @@ R 1: 0xF8000000   R 2: 0x80000000   R 3: 0x00000004
 ### Conclusiones
 SRAR preserva signo correctamente.
 
+
+---
+
+## Caso 20b: SRAR (variante con valor positivo)
+
+### Descripción
+Shift Right Arithmetic Register con número positivo — rellena con 0s porque bit 31=0.
+
+### Instrucciones
+- SRAR r1, r2, r3
+
+### Precondiciones
+set pc 0
+s r2 0x40000000
+s r3 4
+
+### Code
+s [0x0] 0x00C41005
+
+00000 opcode
+00011 $3 (rs)
+00010 $2 (rt)
+00001 $1 (rd)
+00000 aux
+0000101 funct (SRAR = 0x05)
+
+0000, 0000, 1100, 0100, 0001, 0000, 0000, 0101
+   0        0        C        4        1        0       0        5
+
+### Postcondiciones
+R 1: 0x04000000   R 2: 0x40000000   R 3: 0x00000004
+0x40000000 (positivo) >>> 4 = 0x04000000 (bits altos en 0)
+
+### Conclusiones
+SRAR con valor positivo: rellena con 0s correctamente. Contraste con 0x80000000 que rellena con 1s.
+
+Hasta Aca nico martes a la noche
 
 ---
 
