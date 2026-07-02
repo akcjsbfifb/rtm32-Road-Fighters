@@ -60,8 +60,7 @@
               "title": "rtm32v2"
             }
           }
-        ],
-        "currentTab": 3
+        ]
       },
       {
         "id": "a74280313710862d",
@@ -258,10 +257,11 @@
       "bases:Create new base": false
     }
   },
-  "active": "66eaf8120653193e",
+  "active": "d087c4a24091b567",
   "lastOpenFiles": [
-    "rtm32v2.pdf",
     "tests/MIS_TESTS.md",
+    "README.md",
+    "rtm32v2.pdf",
     "tests/TEST_LHU.md",
     "mostrar_h/explicacion_mostrar_h.md",
     "tests/README.md",
@@ -275,7 +275,6 @@
     "rtm32.bak",
     "rtm32v2.s",
     "rtm32v2",
-    "README.md",
     "terminal-wrapper.md",
     "AI-PROMPT.md",
     "tests/test_j_jal.bin",
