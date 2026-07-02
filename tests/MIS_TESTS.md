@@ -919,7 +919,7 @@ s [0x0] 0x00C41004
 
 0000, 0000, 1100, 0100, 0001, 0000, 0000, 0100
    0        0        C        4        1        0       0        4
-
+3
 ### Postcondiciones
 R 1: 0x00000008   R 2: 0x00000080   R 3: 0x00000004
 0x80 >> 4 = 8
@@ -991,6 +991,7 @@ s [0x0] 0x00C41005
 
 0000, 0000, 1100, 0100, 0001, 0000, 0000, 0101
    0        0        C        4        1        0       0        5
+
 
 ### Postcondiciones
 R 1: 0xF8000000   R 2: 0x80000000   R 3: 0x00000004
@@ -1065,7 +1066,7 @@ s [0x0] 0x40820000
 
 ### Postcondiciones
 R 1: 0xDEADBEEF   R 2: 0x00001000
-M[0x1000 + 0] = 0xDEADBEEF
+M[0x1000 + 0] = 0xDDDDDDDD
 
 ### Conclusiones
 LW carga 4 bytes de memoria correctamente.
