@@ -1,7 +1,5 @@
 # RTM32 — Emulador de procesador didáctico
 
-Emulador de un CPU RISC de 32 bits con debugger remoto vía telnet y UART por MMIO.
-
 ## Requisitos
 
 ```bash
@@ -23,6 +21,8 @@ pkill xterm   # cerrar terminales abiertas por el emulador
 ```
 
 # Testing de instrucciones RTM32
+
+Por Martin Moloeznik y Nicolas Paz Reyes
 
 ---
 
