@@ -44,22 +44,20 @@ ADD funciona correctamente, suma $2 + $3 y guarda en $1.
 - set r2, 5
 
 ### Code
-s [0x0] 0x08410005
+s [0x0] 0x08820005
 
 00001 opcode
 00010 $2
 00001 $1
 0,0000,0000,0000,0101 (imm 5 en 17 bits.)
 
-0000, 1000, 0100, 0001, 0000, 0000, 0000, 0101
-   0        8         4        1        0       0         0       5
-
+0000,1000,1000,0010,0000,0000,0000,0101
+   0       8        8        2      0        0       0       5
 ### Postcondiciones
-- R[ 1]: 0x00000000   R[ 2]: 0x00000005
-- R1 debería ser 0xA (5 + 5) pero quedó en 0x0
+- R[ 1]: 0x0000000A   R[ 2]: 0x00000005
 
 ### Conclusiones
-❌ **Falla** — El emulador (versión anterior al PDF v2) no reconoce el opcode 00001. Se requiere el binario actualizado que implemente la ISA de rtm32v2.pdf.
+En nueva version funciona con opcode 00001.
 
 
 ---
@@ -270,7 +268,7 @@ NOR funciona correctamente. El resultado muestra todos los bits altos en 1 por l
 ## Caso 8: ANDI
 
 ### Descripción
-AND con inmediato
+AND inmediato
 
 ### Instrucciones
 - ANDI r1, r2, 0xF
@@ -304,7 +302,7 @@ ANDI funciona. El inmediato se extiende con ceros (zero-extend), no con signo.
 ## Caso 9: ORI
 
 ### Descripción
-OR inmediato (zero-extend)
+OR inmediato 
 
 ### Instrucciones
 - ORI r1, r2, 8
@@ -366,7 +364,7 @@ R 1: 0x000000F0   R 2: 0x000000FF
 0xFF ^ 0xF = 0xF0
 
 ### Conclusiones
-Si r1=0xF0 → XORI opcode 00110 confirmado. Si r1=0x0F → comparte opcode con ANDI (00100).
+funciona correctamente con la v2 del manual.
 
 
 ---
@@ -1050,8 +1048,8 @@ Load Word: R[rt] = M[R[rs] + SignExtImm]
 
 ### Precondiciones
 set pc 0
-s [0x1000] 0xDEADBEEF
-s r2 0x1000
+s [0x50] 0xDDDDDDDD
+s r2 0x50
 
 ### Code
 s [0x0] 0x40820000
@@ -1065,8 +1063,8 @@ s [0x0] 0x40820000
    4        0        8        2        0        0       0        0
 
 ### Postcondiciones
-R 1: 0xDEADBEEF   R 2: 0x00001000
-M[0x1000 + 0] = 0xDDDDDDDD
+R 1: 0xDDDDDDDD   R 2: 0x00000050
+M[0x50 + 0] = 0xDDDDDDDD
 
 ### Conclusiones
 LW carga 4 bytes de memoria correctamente.
@@ -1085,7 +1083,7 @@ Store Word: M[R[rs] + SignExtImm] = R[rt]
 ### Precondiciones
 set pc 0
 s r1 0xCAFEBABE
-s r2 0x1000
+s r2 0x50
 
 ### Code
 s [0x0] 0x48820000
@@ -1099,10 +1097,10 @@ s [0x0] 0x48820000
    4        8        8        2        0       0        0        0
 
 ### Postcondiciones
-x xw 0x1000 1 → muestra 0xCAFEBABE
+x xw 0x50  → muestra 0xCCCCCCCC
 
 ### Conclusiones
-SW guarda 4 bytes en M[0x1000]. Verificar con: x xw 0x1000 1
+SW guarda 4 bytes en M[0x50]. Verificar con: x xw 0x50
 
 
 ---
@@ -1142,6 +1140,7 @@ J 4 desde 0x0 → PC = 0x10.
 
 ### Descripción
 Jump Register: PC = R[rs]
+se utilizaria para "volver de una subrutina" entonces vuelvo a la direccion que dejo jal o jalr en el registro 31 que es la $ra Dirección de retorno 
 
 ### Instrucciones
 - JR r31
@@ -1187,16 +1186,16 @@ set pc 0
 s [0x0] 0x18000004
 
 00011 opcode (JAL = 0x03)
-000,0000,0000,0000,0000,0000,0000,0100 (address 4)
+000,0000,0000,0000,0000,0000,0010,0000 (address 4)
 
-0001, 1000, 0000, 0000, 0000, 0000, 0000, 0100
-   1        8        0        0        0        0       0        4
+0001, 1000, 0000, 0000, 0000, 0000, 0010, 0000
+   1        8        0        0        0        0       2        0
 
 ### Postcondiciones
-PC = 0x00000010   R 31: 0x00000004
+PC = 0x00000080   R 31: 0x00000004
 
 ### Conclusiones
-JAL: salta a 0x10 y guarda retorno (0x04) en $31.
+JAL: salta a 0x80 y guarda retorno (0x04) en $31.
 
 
 ---
@@ -1204,33 +1203,33 @@ JAL: salta a 0x10 y guarda retorno (0x04) en $31.
 ## Caso 26: JALR
 
 ### Descripción
-Jump And Link Register: R[31] = PC+4; PC = R[rs]
+Jump And Link Register: R[rd] = PC+4; PC = R[rs]. El link va a rd.
 
 ### Instrucciones
-- JALR r4
+- JALR r4, r31
 
 ### Precondiciones
 set pc 0
 s r4 0x100
 
 ### Code
-s [0x0] 0x0100000F
+s [0x0] 0x0101F00F
 
 00000 opcode (R-type)
-00100 rs ($4)
-00000 rt
-00000 rd
+00100 rs ($4, destino del salto)
+00000 rt (no usado)
+11111 rd ($31, donde guarda retorno)
 00000 aux
 0001111 funct (JALR = 0x0F)
 
-0000, 0001, 0000, 0000, 0000, 0000, 0000, 1111
-   0        1        0        0        0        0       0        F
+0000, 0001, 0000, 0001, 1111, 0000, 0000, 1111
+   0        1        0        1        F        0        0        F
 
 ### Postcondiciones
 PC = 0x00000100   R 31: 0x00000004
 
 ### Conclusiones
-JALR: PC = R[4] = 0x100, $31 = retorno (0x04).
+JALR: PC = R[4] = 0x100, R[31] = PC+4 = 0x04. El link se escribe en rd.
 
 
 ---
@@ -1238,9 +1237,8 @@ JALR: PC = R[4] = 0x100, $31 = retorno (0x04).
 ## Caso 27: LUI
 
 ### Descripción
-Load Upper Immediate: R[rt] = {imm[15:0], 16'b0}. Opcode 11000 (mismo que ADDI),
-se distingue con rs=0 + imm[16]=1.
-
+Pone un número de 16 bits en la mitad de arriba de un registro y deja la mitad de abajo en ceros.
+No importa el bit h (como si en andi ori xori) , siempre los pone en los 16 de la parte alta.
 ### Instrucciones
 - LUI r1, 0x1234
 
@@ -1248,23 +1246,26 @@ se distingue con rs=0 + imm[16]=1.
 set pc 0
 
 ### Code
-s [0x0] 0xC0031234
+s [0x0] 0x38031234
 
-11000 opcode (mismo que ADDI = 0x18)
-00000 rs ($0: señal de LUI)
+00111 opcode (LUI = 0x07)
+00000 rs (no usado)
 00001 rt ($1)
-1,0001,0010,0011,0100 (imm[16]=1, imm[15:0]=0x1234)
+1,0001,0010,0011,0100 (h=1, imm=0x1234)
 
-1100, 0000, 0000, 0011, 0001, 0010, 0011, 0100
-   C        0         0       3        1        2        3        4
+0011, 1000, 0000, 0011, 0001, 0010, 0011, 0100
+   3        8        0        3        1        2        3        4
 
 ### Postcondiciones
 R 1: 0x12340000
 
 ### Conclusiones
-LUI carga 0x1234 en parte alta. Si r1 = 0x00001234 → imm fue a baja (bug).
-Si r1 = 0xFFFFFFFF → se sign-extendió. Si r1 = 0x12340000 → OK.
+LUI carga 0x1234 en parte alta: {0x1234, 16'b0} = 0x12340000. OK.
 
+Pregunta: 
+lui carga en parte alta
+ori hace lo mismo en parte baja
+orih para que existe? o para que existe lui?
 
 ---
 
@@ -1362,7 +1363,8 @@ R 1: 0x9ABC0000   R 2: 0x00000000
 0 ^ 0x9ABC0000 = 0x9ABC0000
 
 ### Conclusiones
-XORIH: confirma opcode 00110 si funciona con imm[16]=1. Si r1=0 → XORI no usa opcode 00110.
+XORIH: confirma opcode 00110 si funciona con imm[16]=1.
+
 
 
 ---
@@ -1603,7 +1605,7 @@ Store Halfword: M[addr](15:0) = R[rt](15:0)
 ### Precondiciones
 set pc 0
 s r1 0x1234ABCD
-s r2 0x1000
+s r2 0x50
 
 ### Code
 s [0x0] 0x50820000
@@ -1617,10 +1619,10 @@ s [0x0] 0x50820000
    5        0        8        2       0        0        0        0
 
 ### Postcondiciones
-x xw 0x1000 1 → halfword baja = 0xABCD
+x xw 0x50 1 → halfword baja = 0xABCD
 
 ### Conclusiones
-SH guarda 16 bits bajos de $1. Verificar con: x xw 0x1000 1
+SH guarda 16 bits bajos de $1. Verificar con: x xw 0x50 1
 
 
 ---
@@ -1636,7 +1638,7 @@ Store Byte: M[addr](7:0) = R[rt](7:0)
 ### Precondiciones
 set pc 0
 s r1 0x41
-s r2 0x1000
+s r2 0x50
 
 ### Code
 s [0x0] 0x58820000
@@ -1650,10 +1652,10 @@ s [0x0] 0x58820000
    5        8        8        2       0        0        0        0
 
 ### Postcondiciones
-x xb 0x1000 4 → primer byte = 0x41 ('A')
+x xb 0x50 4 → primer byte = 0x41 ('A')
 
 ### Conclusiones
-SB guarda 1 byte. Verificar con: x xb 0x1000 4
+SB guarda 1 byte. Verificar con: x xb 0x50 4
 
 
 ---
@@ -1668,8 +1670,8 @@ Load Halfword con sign-extend
 
 ### Precondiciones
 set pc 0
-s [0x1000] 0x00008000
-s r2 0x1000
+s [0x50] 0x00008000
+s r2 0x50
 
 ### Code
 s [0x0] 0x60820000
@@ -1683,7 +1685,7 @@ s [0x0] 0x60820000
    6        0        8        2        0        0        0        0
 
 ### Postcondiciones
-R 1: 0xFFFF8000   R 2: 0x00001000
+R 1: 0xFFFF8000   R 2: 0x00000050
 Halfword 0x8000 → sign-extend → 0xFFFF8000
 
 ### Conclusiones
@@ -1695,15 +1697,17 @@ LH extiende signo: 0x8000 → 0xFFFF8000 (bit 15=1 → bits altos en 1).
 ## Caso 40: LHU
 
 ### Descripción
-Load Halfword Unsigned (zero-extend)
+Load Halfword Unsigned (zero-extend). ❌ BUG: ejecuta como LB.
 
 ### Instrucciones
 - LHU r1, r2, 0
 
 ### Precondiciones
 set pc 0
-s [0x1000] 0x00008000
-s r2 0x1000
+s r2 0x50
+s [0x50] 0x0000BBBB
+s [0x0] 0x68820000
+s [0x4] 0x00000000
 
 ### Code
 s [0x0] 0x68820000
@@ -1711,17 +1715,20 @@ s [0x0] 0x68820000
 01101 opcode (LHU = 0x0D)
 00010 $2
 00001 $1
-0,0000,0000,0000,0000
+0,0000,0000,0000,0000 (imm 0)
 
 0110, 1000, 1000, 0010, 0000, 0000, 0000, 0000
    6        8        8        2       0        0        0        0
 
 ### Postcondiciones
-R 1: 0x00008000   R 2: 0x00001000
-0x8000 → zero-extend → 0x00008000
+R 1: 0xFFFFFFBB   R 2: 0x00000050
+Last Memory Operation: Size: 0x00000001 (leyo 1 byte, no 2)
+
+LHU esperado: 0x0000BBBB (zero-extend half). Obtenido: 0xFFFFFFBB (sign-extend byte).
 
 ### Conclusiones
-LHU: zero-extend, bits altos = 0.
+❌ R1=0xFFFFFFBB = sign-extend de 1 byte (LB). 0xBB → LB → 0xFFFFFFBB.
+Size 0x01 → lee 1 byte, no 2. Bug: LHU cae al case de LB en el decodificador.
 
 
 ---
@@ -1736,8 +1743,8 @@ Load Byte con sign-extend
 
 ### Precondiciones
 set pc 0
-s [0x1000] 0x00000080
-s r2 0x1000
+s [0x50] 0x00000080
+s r2 0x50
 
 ### Code
 s [0x0] 0x70820000
@@ -1751,7 +1758,7 @@ s [0x0] 0x70820000
    7        0        8        2        0        0        0        0
 
 ### Postcondiciones
-R 1: 0xFFFFFF80   R 2: 0x00001000
+R 1: 0xFFFFFF80   R 2: 0x00000050
 Byte 0x80 → sign-extend → 0xFFFFFF80
 
 ### Conclusiones
@@ -1770,8 +1777,8 @@ Load Byte Unsigned (zero-extend)
 
 ### Precondiciones
 set pc 0
-s [0x1000] 0x00000080
-s r2 0x1000
+s [0x50] 0x00000080
+s r2 0x50
 
 ### Code
 s [0x0] 0x78820000
@@ -1785,7 +1792,7 @@ s [0x0] 0x78820000
    7        8        8        2       0        0        0        0
 
 ### Postcondiciones
-R 1: 0x00000080   R 2: 0x00001000
+R 1: 0x00000080   R 2: 0x00000050
 Byte 0x80 → zero-extend → 0x00000080
 
 ### Conclusiones
@@ -1804,9 +1811,9 @@ Load Word Indexed: R[rt] = M[R[rs] + R[rd]]. ATENCIÓN: en indexed loads, rt es 
 
 ### Precondiciones
 set pc 0
-s [0x1050] 0xBEEFFACE
-s r2 0x1000
-s r3 0x50
+s [0x70] 0xBEEFFACE
+s r2 0x50
+s r3 0x20
 
 ### Code
 s [0x0] 0x00823014
@@ -1822,8 +1829,8 @@ s [0x0] 0x00823014
    0        0        8        2        3        0       1        4
 
 ### Postcondiciones
-R 1: 0xBEEFFACE   R 2: 0x00001000   R 3: 0x00000050
-M[0x1000 + 0x50] = M[0x1050] = 0xBEEFFACE
+R 1: 0xBEEFFACE   R 2: 0x00000050   R 3: 0x00000020
+M[0x50 + 0x20] = M[0x70] = 0xBEEFFACE
 
 ### Conclusiones
 LWX: dirección = R[rs] + R[rd] (base + offset en registros).
@@ -1841,9 +1848,9 @@ Load Halfword Indexed con sign-extend
 
 ### Precondiciones
 set pc 0
-s [0x1050] 0x00008000
-s r2 0x1000
-s r3 0x50
+s [0x70] 0x00008000
+s r2 0x50
+s r3 0x20
 
 ### Code
 s [0x0] 0x00823010
@@ -1860,7 +1867,7 @@ s [0x0] 0x00823010
 
 ### Postcondiciones
 R 1: 0xFFFF8000
-M[0x1050](15:0) = 0x8000 → sign-extend → 0xFFFF8000
+M[0x70](15:0) = 0x8000 → sign-extend → 0xFFFF8000
 
 ### Conclusiones
 LHX: halfword indexado con sign-extend. Dirección = R[rs] + R[rd].
@@ -1878,9 +1885,9 @@ Load Halfword Indexed Unsigned
 
 ### Precondiciones
 set pc 0
-s [0x1050] 0x00008000
-s r2 0x1000
-s r3 0x50
+s [0x70] 0x00008000
+s r2 0x50
+s r3 0x20
 
 ### Code
 s [0x0] 0x00823011
@@ -1915,9 +1922,9 @@ Load Byte Indexed con sign-extend
 
 ### Precondiciones
 set pc 0
-s [0x1050] 0x00000080
-s r2 0x1000
-s r3 0x50
+s [0x70] 0x00000080
+s r2 0x50
+s r3 0x20
 
 ### Code
 s [0x0] 0x00823012
@@ -1952,9 +1959,9 @@ Load Byte Indexed Unsigned
 
 ### Precondiciones
 set pc 0
-s [0x1050] 0x00000080
-s r2 0x1000
-s r3 0x50
+s [0x70] 0x00000080
+s r2 0x50
+s r3 0x20
 
 ### Code
 s [0x0] 0x00823013

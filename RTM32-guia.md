@@ -174,11 +174,11 @@ Convenciones de inmediatos:
 | `00010` | **J**     | address      | PC = JumpAddr                          |
 | `00011` | **JAL**   | address      | R[31] = PC+4; PC = JumpAddr            |
 | `00100` | **ANDI**  | rs rt imm    | R[rt] = R[rs] & ZeroExtImm             |
-|         | **ANDIH** | rs rt imm    | R[rt] = R[rs] & ZeroCatImm             |
-| 00101   | **ORI**   | rs rt imm    | R[rt] = R[rs] \| ZeroExtImm            |
-|         | **ORIH**  | rs rt imm    | R[rt] = R[rs] \| ZeroCatImm            |
-| `00100` | **XORI**  | rs rt imm    | R[rt] = R[rs] ⊕ ZeroExtImm             |
-|         | **XORIH** | rs rt imm    | R[rt] = R[rs] ⊕ ZeroCatImm             |
+| `00100` | **ANDIH** | rs rt imm    | R[rt] = R[rs] & ZeroCatImm             |
+| `00101` | **ORI**   | rs rt imm    | R[rt] = R[rs] \| ZeroExtImm            |
+| `00101` | **ORIH**  | rs rt imm    | R[rt] = R[rs] \| ZeroCatImm            |
+| `00110` | **XORI**  | rs rt imm    | R[rt] = R[rs] ⊕ ZeroExtImm             |
+| `00110` | **XORIH** | rs rt imm    | R[rt] = R[rs] ⊕ ZeroCatImm             |
 | `01000` | **LW**    | rs rt imm    | R[rt] = M[addr] *(word)*               |
 | `01001` | **SW**    | rs rt imm    | M[addr] = R[rt] *(word)*               |
 | `01010` | **SH**    | rs rt imm    | M[addr] (15:0) = R[rt] (15:0) *(half)* |
@@ -195,10 +195,10 @@ Convenciones de inmediatos:
 | `10101` | **BGE**   | rs rt imm    | if R[rs]>=R[rt] PC=PC+4+BranchAddr     |
 | `10110` | **SLTI**  | rs rt imm    | R[rt] = (R[rs] < SignExtImm) ? 1 : 0   |
 | `10111` | **SLTIU** | rs rt imm    | Igual pero sin signo                   |
-| `11000` | **ADDI**  | rs rt imm    | R[rt] = R[rs] + SignExtImm             |
-| `11000` | **LUI**   | rt imm       | R[rt] = ZeroCatImm                     |
+| `00001` | **ADDI**  | rs rt imm    | R[rt] = R[rs] + SignExtImm             |
+| `00111` | **LUI**   | rt imm       | R[rt] = ZeroCatImm                     |
 
-> `addr = R[rs] + SignExtImm`. La distinción ANDI/ANDIH, ORI/ORIH, XORI/XORIH, ADDI/LUI se da por un campo de la codificación (probablemente imm[16]).
+> `addr = R[rs] + SignExtImm`. La distinción ANDI/ANDIH, ORI/ORIH, XORI/XORIH se da por el bit `h` (inm[16] en formato L). ADDI (`00001`) y LUI (`00111`) tienen opcodes propios separados en v2.
 
 ---
 

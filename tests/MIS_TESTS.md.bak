@@ -1,7 +1,6 @@
 # Testing de instrucciones RTM32
 
 ---
-
 ## Caso 1:
 
 ### Descripción
@@ -301,501 +300,7 @@ ANDI funciona. El inmediato se extiende con ceros (zero-extend), no con signo.
 
 ---
 
-## Caso 9: ORI
-
-### Descripción
-
-
-### Instrucciones
-- ORI r1, r2, 8
-
-### Precondiciones
-- 
-- 
-- 
-
-### Code
-
-
-### Postcondiciones
-- 
-- 
-
-### Conclusiones
-
-
-
----
-
-## Caso 10: XORI
-
-### Descripción
-
-
-### Instrucciones
-- XORI r1, r2, 0xF
-
-### Precondiciones
-- 
-- 
-- 
-
-### Code
-
-
-### Postcondiciones
-- 
-- 
-
-### Conclusiones
-
-
-
----
-
-## Caso 11: SLT
-
-### Descripción
-
-
-### Instrucciones
-- SLT r1, r2, r3
-
-### Precondiciones
-- 
-- 
-- 
-
-### Code
-
-
-### Postcondiciones
-- 
-- 
-
-### Conclusiones
-
-
-
----
-
-## Caso 12: SLTU
-
-### Descripción
-
-
-### Instrucciones
-- SLTU r1, r2, r3
-
-### Precondiciones
-- 
-- 
-- 
-
-### Code
-
-
-### Postcondiciones
-- 
-- 
-
-### Conclusiones
-
-
-
----
-
-## Caso 13: SLTI
-
-### Descripción
-
-
-### Instrucciones
-- SLTI r1, r2, 10
-
-### Precondiciones
-- 
-- 
-- 
-
-### Code
-
-
-### Postcondiciones
-- 
-- 
-
-### Conclusiones
-
-
-
----
-
-## Caso 14: SLTIU
-
-### Descripción
-
-
-### Instrucciones
-- SLTIU r1, r2, 1
-
-### Precondiciones
-- 
-- 
-- 
-
-### Code
-
-
-### Postcondiciones
-- 
-- 
-
-### Conclusiones
-
-
-
----
-
-## Caso 15: SLL
-
-### Descripción
-
-
-### Instrucciones
-- SLL r1, r2, 4
-
-### Precondiciones
-- 
-- 
-- 
-
-### Code
-
-
-### Postcondiciones
-- 
-- 
-
-### Conclusiones
-
-
-
----
-
-## Caso 16: SRL
-
-### Descripción
-
-
-### Instrucciones
-- SRL r1, r2, 4
-
-### Precondiciones
-- 
-- 
-- 
-
-### Code
-
-
-### Postcondiciones
-- 
-- 
-
-### Conclusiones
-
-
-
----
-
-## Caso 17: SRA
-
-### Descripción
-
-
-### Instrucciones
-- SRA r1, r2, 4
-
-### Precondiciones
-- 
-- 
-- 
-
-### Code
-
-
-### Postcondiciones
-- 
-- 
-
-### Conclusiones
-
-
-
----
-
-## Caso 18: SLLR
-
-### Descripción
-
-
-### Instrucciones
-- SLLR r1, r2, r3
-
-### Precondiciones
-- 
-- 
-- 
-
-### Code
-
-
-### Postcondiciones
-- 
-- 
-
-### Conclusiones
-
-
-
----
-
-## Caso 19: SRLR
-
-### Descripción
-
-
-### Instrucciones
-- SRLR r1, r2, r3
-
-### Precondiciones
-- 
-- 
-- 
-
-### Code
-
-
-### Postcondiciones
-- 
-- 
-
-### Conclusiones
-
-
-
----
-
-## Caso 20: SRAR
-
-### Descripción
-
-
-### Instrucciones
-- SRAR r1, r2, r3
-
-### Precondiciones
-- 
-- 
-- 
-
-### Code
-
-
-### Postcondiciones
-- 
-- 
-
-### Conclusiones
-
-
-
----
-
-## Caso 21: LW
-
-### Descripción
-
-
-### Instrucciones
-- LW r1, r2, 0
-
-### Precondiciones
-- 
-- 
-- 
-
-### Code
-
-
-### Postcondiciones
-- 
-- 
-
-### Conclusiones
-
-
-
----
-
-## Caso 22: SW
-
-### Descripción
-
-
-### Instrucciones
-- SW r1, r2, 0
-
-### Precondiciones
-- 
-- 
-- 
-
-### Code
-
-
-### Postcondiciones
-- 
-- 
-
-### Conclusiones
-
-
-
----
-
-## Caso 23: J
-
-### Descripción
-
-
-### Instrucciones
-- J 4
-
-### Precondiciones
-- 
-- 
-- 
-
-### Code
-
-
-### Postcondiciones
-- 
-- 
-
-### Conclusiones
-
-
-
----
-
-## Caso 24: JR
-
-### Descripción
-
-
-### Instrucciones
-- JR r31
-
-### Precondiciones
-- 
-- 
-- 
-
-### Code
-
-
-### Postcondiciones
-- 
-- 
-
-### Conclusiones
-
-
-
----
-
-## Caso 25: JAL
-
-### Descripción
-
-
-### Instrucciones
-- JAL 4
-
-### Precondiciones
-- 
-- 
-- 
-
-### Code
-
-
-### Postcondiciones
-- 
-- 
-
-### Conclusiones
-
-
-
----
-
-## Caso 26: JALR
-
-### Descripción
-
-
-### Instrucciones
-- JALR r4
-
-### Precondiciones
-- 
-- 
-- 
-
-### Code
-
-
-### Postcondiciones
-- 
-- 
-
-### Conclusiones
-
-
-
----
-
-## Caso 27: LUI
-
-### Descripción
-
-
-### Instrucciones
-- LUI r1, 0x1234
-
-### Precondiciones
-- 
-- 
-- 
-
-### Code
-
-
-### Postcondiciones
-- 
-- 
-
-### Conclusiones
-
-
-
----
-
-## Caso 28: ANDIH
+## Caso 9: ANDIH
 
 ### Descripción
 
@@ -821,7 +326,33 @@ ANDI funciona. El inmediato se extiende con ceros (zero-extend), no con signo.
 
 ---
 
-## Caso 29: ORIH
+## Caso 10: ORI
+
+### Descripción
+
+
+### Instrucciones
+- ORI r1, r2, 8
+
+### Precondiciones
+- 
+- 
+- 
+
+### Code
+
+
+### Postcondiciones
+- 
+- 
+
+### Conclusiones
+
+
+
+---
+
+## Caso 11: ORIH
 
 ### Descripción
 
@@ -847,13 +378,481 @@ ANDI funciona. El inmediato se extiende con ceros (zero-extend), no con signo.
 
 ---
 
-## Caso 30: XORIH
+## Caso 12: XORI
+
+### Descripción
+
+
+### Instrucciones
+- XORI r1, r2, 0xF
+
+### Precondiciones
+- 
+- 
+- 
+
+### Code
+
+
+### Postcondiciones
+- 
+- 
+
+### Conclusiones
+
+
+
+---
+
+## Caso 13: XORIH
 
 ### Descripción
 
 
 ### Instrucciones
 - XORIH r1, r2, 0x9ABC
+
+### Precondiciones
+- 
+- 
+- 
+
+### Code
+
+
+### Postcondiciones
+- 
+- 
+
+### Conclusiones
+
+
+
+---
+
+## Caso 14: SLT
+
+### Descripción
+
+
+### Instrucciones
+- SLT r1, r2, r3
+
+### Precondiciones
+- 
+- 
+- 
+
+### Code
+
+
+### Postcondiciones
+- 
+- 
+
+### Conclusiones
+
+
+
+---
+
+## Caso 15: SLTU
+
+### Descripción
+
+
+### Instrucciones
+- SLTU r1, r2, r3
+
+### Precondiciones
+- 
+- 
+- 
+
+### Code
+
+
+### Postcondiciones
+- 
+- 
+
+### Conclusiones
+
+
+
+---
+
+## Caso 16: SLTI
+
+### Descripción
+
+
+### Instrucciones
+- SLTI r1, r2, 10
+
+### Precondiciones
+- 
+- 
+- 
+
+### Code
+
+
+### Postcondiciones
+- 
+- 
+
+### Conclusiones
+
+
+
+---
+
+## Caso 17: SLTIU
+
+### Descripción
+
+
+### Instrucciones
+- SLTIU r1, r2, 1
+
+### Precondiciones
+- 
+- 
+- 
+
+### Code
+
+
+### Postcondiciones
+- 
+- 
+
+### Conclusiones
+
+
+
+---
+
+## Caso 18: SLL
+
+### Descripción
+
+
+### Instrucciones
+- SLL r1, r2, 4
+
+### Precondiciones
+- 
+- 
+- 
+
+### Code
+
+
+### Postcondiciones
+- 
+- 
+
+### Conclusiones
+
+
+
+---
+
+## Caso 19: SRL
+
+### Descripción
+
+
+### Instrucciones
+- SRL r1, r2, 4
+
+### Precondiciones
+- 
+- 
+- 
+
+### Code
+
+
+### Postcondiciones
+- 
+- 
+
+### Conclusiones
+
+
+
+---
+
+## Caso 20: SRA
+
+### Descripción
+
+
+### Instrucciones
+- SRA r1, r2, 4
+
+### Precondiciones
+- 
+- 
+- 
+
+### Code
+
+
+### Postcondiciones
+- 
+- 
+
+### Conclusiones
+
+
+
+---
+
+## Caso 21: SLLR
+
+### Descripción
+
+
+### Instrucciones
+- SLLR r1, r2, r3
+
+### Precondiciones
+- 
+- 
+- 
+
+### Code
+
+
+### Postcondiciones
+- 
+- 
+
+### Conclusiones
+
+
+
+---
+
+## Caso 22: SRLR
+
+### Descripción
+
+
+### Instrucciones
+- SRLR r1, r2, r3
+
+### Precondiciones
+- 
+- 
+- 
+
+### Code
+
+
+### Postcondiciones
+- 
+- 
+
+### Conclusiones
+
+
+
+---
+
+## Caso 23: SRAR
+
+### Descripción
+
+
+### Instrucciones
+- SRAR r1, r2, r3
+
+### Precondiciones
+- 
+- 
+- 
+
+### Code
+
+
+### Postcondiciones
+- 
+- 
+
+### Conclusiones
+
+
+
+---
+
+## Caso 24: LW
+
+### Descripción
+
+
+### Instrucciones
+- LW r1, r2, 0
+
+### Precondiciones
+- 
+- 
+- 
+
+### Code
+
+
+### Postcondiciones
+- 
+- 
+
+### Conclusiones
+
+
+
+---
+
+## Caso 25: SW
+
+### Descripción
+
+
+### Instrucciones
+- SW r1, r2, 0
+
+### Precondiciones
+- 
+- 
+- 
+
+### Code
+
+
+### Postcondiciones
+- 
+- 
+
+### Conclusiones
+
+
+
+---
+
+## Caso 26: J
+
+### Descripción
+
+
+### Instrucciones
+- J 4
+
+### Precondiciones
+- 
+- 
+- 
+
+### Code
+
+
+### Postcondiciones
+- 
+- 
+
+### Conclusiones
+
+
+
+---
+
+## Caso 27: JR
+
+### Descripción
+
+
+### Instrucciones
+- JR r31
+
+### Precondiciones
+- 
+- 
+- 
+
+### Code
+
+
+### Postcondiciones
+- 
+- 
+
+### Conclusiones
+
+
+
+---
+
+## Caso 28: JAL
+
+### Descripción
+
+
+### Instrucciones
+- JAL 4
+
+### Precondiciones
+- 
+- 
+- 
+
+### Code
+
+
+### Postcondiciones
+- 
+- 
+
+### Conclusiones
+
+
+
+---
+
+## Caso 29: JALR
+
+### Descripción
+
+
+### Instrucciones
+- JALR r4
+
+### Precondiciones
+- 
+- 
+- 
+
+### Code
+
+
+### Postcondiciones
+- 
+- 
+
+### Conclusiones
+
+
+
+---
+
+## Caso 30: LUI
+
+### Descripción
+
+
+### Instrucciones
+- LUI r1, 0x1234
 
 ### Precondiciones
 - 
@@ -1492,5 +1491,6 @@ ANDI funciona. El inmediato se extiende con ceros (zero-extend), no con signo.
 - 
 
 ### Conclusiones
+
 
 
