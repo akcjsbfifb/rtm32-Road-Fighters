@@ -1697,7 +1697,7 @@ LH extiende signo: 0x8000 → 0xFFFF8000 (bit 15=1 → bits altos en 1).
 ## Caso 40: LHU
 
 ### Descripción
-Load Halfword Unsigned (zero-extend). ❌ BUG: ejecuta como LB.
+Load Halfword Unsigned (zero-extend). ✅ Corregido en v3 (faltaba el `end` del case LHU, caía en LB).
 
 ### Instrucciones
 - LHU r1, r2, 0
@@ -1706,8 +1706,6 @@ Load Halfword Unsigned (zero-extend). ❌ BUG: ejecuta como LB.
 set pc 0
 s r2 0x50
 s [0x50] 0x0000BBBB
-s [0x0] 0x68820000
-s [0x4] 0x00000000
 
 ### Code
 s [0x0] 0x68820000
@@ -1721,14 +1719,13 @@ s [0x0] 0x68820000
    6        8        8        2       0        0        0        0
 
 ### Postcondiciones
-R 1: 0xFFFFFFBB   R 2: 0x00000050
-Last Memory Operation: Size: 0x00000001 (leyo 1 byte, no 2)
-
-LHU esperado: 0x0000BBBB (zero-extend half). Obtenido: 0xFFFFFFBB (sign-extend byte).
+R 1: 0x0000BBBB   R 2: 0x00000050
+M[0x50](15:0) = 0xBBBB → zero-extend → 0x0000BBBB
 
 ### Conclusiones
-❌ R1=0xFFFFFFBB = sign-extend de 1 byte (LB). 0xBB → LB → 0xFFFFFFBB.
-Size 0x01 → lee 1 byte, no 2. Bug: LHU cae al case de LB en el decodificador.
+✅ ARREGLADO en v3. LHU carga 2 bytes (halfword) y hace zero-extend: 0xBBBB → 0x0000BBBB.
+Bug original: faltaba el `end` del case LHU en el decodificador, el flujo continuaba al case de LB.
+(Probado 2026-07-02, 22.27pm, binario rtm32 v3)
 
 
 ---

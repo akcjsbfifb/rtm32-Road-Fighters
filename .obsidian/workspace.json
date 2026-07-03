@@ -93,8 +93,7 @@
               "title": "rtm32v3"
             }
           }
-        ],
-        "currentTab": 1
+        ]
       }
     ],
     "direction": "vertical"
@@ -256,13 +255,13 @@
       "bases:Crear nueva base": false
     }
   },
-  "active": "915ea83d70ef5ee2",
+  "active": "d087c4a24091b567",
   "lastOpenFiles": [
-    "mostrar_h/explicacion_mostrar_h.md",
-    "README.md",
-    "tests/README.md",
-    "rtm32v3.pdf",
     "tests/MIS_TESTS.md",
+    "README.md",
+    "rtm32v3.pdf",
+    "mostrar_h/explicacion_mostrar_h.md",
+    "tests/README.md",
     "rtm32v2.pdf",
     "tests/TEST_LHU.md",
     "rtm32.pdf",

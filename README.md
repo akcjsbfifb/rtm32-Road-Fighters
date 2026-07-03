@@ -1388,3 +1388,221 @@ R 1: 0x9ABC0000   R 2: 0x00000000
 
 ### Conclusiones
 XORIH: confirma opcode 00110 si funciona con imm[16]=1.
+
+
+---
+
+## Caso 31: BEQ (Branch if Equal)
+
+### Descripción
+Branch if Equal. Estrategia: BEQ en 0x0, ADD r4,r5,r6 en 0x8.
+Si tomado → PC=0x8, ejecuta ADD → r4=30. Si no tomado → PC=0x4, r4=0.
+
+### Instrucciones
+- BEQ r1, r2, 1
+
+### Precondiciones (TOMADO: r1=5, r2=5)
+set pc 0
+s [0x8] 0x014C401C
+s r1 5
+s r2 5
+s r5 10
+s r6 20
+
+### Precondiciones (NO TOMADO: r1=5, r2=99)
+set pc 0
+s [0x8] 0x014C401C
+s r1 5
+s r2 99
+s r5 10
+s r6 20
+
+### Code
+s [0x0] 0x80440001
+
+10000 opcode (BEQ = 0x10)
+00001 $1 (rs)
+00010 $2 (rt)
+0,0000,0000,0000,0001 (imm=1 → BranchAddr=4 → PC=0+4+4=8)
+
+1000, 0000, 0100, 0100, 0000, 0000, 0000, 0001
+   8        0        4        4        0       0        0        1
+
+### Postcondiciones
+TOMADO:     PC=0x00000008, r4=0x0000001E (30)
+NO TOMADO:  PC=0x00000004, r4=0x00000000
+
+### Conclusiones
+BEQ funciona: r1 = r2 → salta a 0x8 y ejecuta ADD. r1!=r2 → no salta, sigue a 0x4.
+Probado 2026-07-02, binario rtm32 v3.
+
+
+---
+
+## Caso 32: BNE (Branch if Not Equal)
+
+### Descripción
+Branch if Not Equal. Misma estrategia: BNE en 0x0, ADD r4,r5,r6 en 0x8.
+
+### Instrucciones
+- BNE r1, r2, 1
+
+### Precondiciones (TOMADO: r1=5, r2=99)
+set pc 0
+s [0x8] 0x014C401C
+s r1 5
+s r2 99
+s r5 10
+s r6 20
+
+### Precondiciones (NO TOMADO: r1=5, r2=5)
+set pc 0
+s [0x8] 0x014C401C
+s r1 5
+s r2 5
+s r5 10
+s r6 20
+
+### Code
+s [0x0] 0x88440001
+
+10001 opcode (BNE = 0x11)
+00001 $1 (rs)
+00010 $2 (rt)
+0,0000,0000,0000,0001 (imm=1)
+
+1000, 1000, 0100, 0100, 0000, 0000, 0000, 0001
+   8        8        4        4        0       0        0        1
+
+### Postcondiciones
+TOMADO:     PC=0x00000008, r4=0x0000001E (30)
+NO TOMADO:  PC=0x00000004, r4=0x00000000
+
+### Conclusiones
+✅ BNE funciona: r1!=r2 → salta. r1 = r2 → no salta.
+Probado 2026-07-02, binario rtm32 v3.
+
+---
+
+## Caso 33: BLT
+
+### Descripción
+Branch if Less Than (signed)
+
+### Instrucciones
+- BLT r1, r2, 1
+
+### Precondiciones (TOMADO: r1=5, r2=10)
+
+set pc 0
+s [0x8] 0x014C401C
+s r1 5
+s r2 10
+s r5 10
+s r6 20
+
+### Precondiciones NO TOMADO: r1 = 10 y r2 = 5
+
+set pc 0
+s [0x8] 0x014C401C
+s r1 10
+s r2 5
+s r5 10
+s r6 20
+### Code
+s [0x0] 0x90440001
+
+10010 opcode (BLT = 0x12)
+00001 $1
+00010 $2
+0,0000,0000,0000,0001
+
+1001, 0000, 0100, 0100, 0000, 0000, 0000, 0001
+   9        0        4        4        0       0        0        1
+
+### Postcondiciones
+TOMADO:     PC=0x08, r4=30  (5<10 signed → true)
+NO TOMADO:  PC=0x04, r4=0   (10<5 signed → false)
+
+### Conclusiones
+BLT compara signed: 5 < 10 → salta, 10 < 5 → no salta.
+
+---
+
+## Caso 34: BGT
+
+### Descripción
+Branch if Greater Than (signed)
+
+### Instrucciones
+- BGT r1, r2, 1
+
+### Precondiciones (TOMADO: r1=10, r2=5)
+set pc 0
+s [0x8] 0x014C401C
+s r1 10
+s r2 5
+s r5 10
+s r6 20
+
+### Precondiciones (NO TOMADO: r1=5, r2=10)
+set pc 0
+s [0x8] 0x014C401C
+s r1 5
+s r2 10
+s r5 10
+s r6 20
+### Code
+s [0x0] 0x98440001
+
+10011 opcode (BGT = 0x13)
+00001 $1
+00010 $2
+0,0000,0000,0000,0001
+
+1001, 1000, 0100, 0100, 0000, 0000, 0000, 0001
+   9        8        4        4       0        0        0        1
+
+### Postcondiciones
+TOMADO:     PC=0x08, r4=30  (10>5 signed → true)
+NO TOMADO:  PC=0x04, r4=0   (5>10 signed → false)
+
+### Conclusiones
+BGT: 10 > 5 signed → salta. 5 > 10 → no salta.
+
+---
+
+## Caso 40: LHU (Load Halfword Unsigned) — Bug encontrado y corregido en v3
+
+### Descripción
+Load Halfword Unsigned: carga 16 bits de memoria y hace zero-extend a 32 bits.
+En versiones anteriores ejecutaba como LB (Load Byte).
+Corregido por Profesor en rtm32 v3 (2026-07-02)
+
+### Instrucciones
+- LHU r1, r2, 0
+
+### Precondiciones
+set pc 0
+s r2 0x50
+s [0x50] 0x0000BBBB
+
+### Code
+s [0x0] 0x68820000
+
+01101 opcode (LHU = 0x0D)
+00010 $2
+00001 $1
+0,0000,0000,0000,0000 (imm 0)
+
+0110, 1000, 1000, 0010, 0000, 0000, 0000, 0000
+   6        8        8        2       0        0        0        0
+
+### Postcondiciones
+R 1: 0x0000BBBB   R 2: 0x00000050
+M[0x50](15:0) = 0xBBBB → zero-extend → 0x0000BBBB
+
+### Conclusiones
+ARREGLADO en v3. LHU carga 2 bytes (halfword) y hace zero-extend: 0xBBBB → 0x0000BBBB.
+Antes devolvía 0xFFFFFFBB (sign-extend de 1 byte, comportamiento de LB).
+Probado 2026-07-02 con binario rtm32 v3.
