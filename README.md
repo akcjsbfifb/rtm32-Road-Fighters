@@ -1572,6 +1572,93 @@ BGT: 10 > 5 signed → salta. 5 > 10 → no salta.
 
 ---
 
+## Caso 35: BLE
+
+### Descripción
+Branch if Less or Equal (signed)
+
+### Instrucciones
+- BLE r1, r2, 1
+
+### Precondiciones (TOMADO: r1=5, r2=5)
+set pc 0
+s [0x8] 0x014C401C
+s r1 5
+s r2 5
+s r5 10
+s r6 20
+
+### Precondiciones (NO TOMADO: r1=10, r2=5)
+set pc 0
+s [0x8] 0x014C401C
+s r1 10
+s r2 5
+s r5 10
+s r6 20
+### Code
+s [0x0] 0xA0440001
+
+10100 opcode (BLE = 0x14)
+00001 $1
+00010 $2
+0,0000,0000,0000,0001
+
+1010, 0000, 0100, 0100, 0000, 0000, 0000, 0001
+   A        0        4        4        0       0        0        1
+
+### Postcondiciones
+TOMADO:     PC=0x08, r4=30  (5<=5 → true)
+NO TOMADO:  PC=0x04, r4=0   (10<=5 → false)
+
+### Conclusiones
+BLE: 5 <= 5 → salta. 10 <= 5 → no salta.
+
+---
+
+## Caso 36: BGE
+
+### Descripción
+Branch if Greater or Equal (signed)
+
+### Instrucciones
+- BGE r1, r2, 1
+
+### Precondiciones (TOMADO: r1=10, r2=5)
+set pc 0
+s [0x8] 0x014C401C
+s r1 10
+s r2 5
+s r5 10
+s r6 20
+
+### Precondiciones (NO TOMADO: r1=5, r2=10)
+set pc 0
+s [0x8] 0x014C401C
+s r1 5
+s r2 10
+s r5 10
+s r6 20
+### Code
+s [0x0] 0xA8440001
+
+10101 opcode (BGE = 0x15)
+00001 $1
+00010 $2
+0,0000,0000,0000,0001
+
+1010, 1000, 0100, 0100, 0000, 0000, 0000, 0001
+   A        8        4        4        0       0        0        1
+
+### Postcondiciones
+TOMADO:     PC=0x08, r4=30  (10>=5 → true)
+NO TOMADO:  PC=0x04, r4=0   (5>=10 → false)
+
+### Conclusiones
+BGE: 10 >= 5 → salta. 5 >= 10 → no salta.
+
+
+---
+
 ## Caso 40: LHU (Load Halfword Unsigned) — Bug encontrado y corregido en v3
 
 ### Descripción
