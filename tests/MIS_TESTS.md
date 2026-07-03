@@ -1594,10 +1594,12 @@ BGE: 10 >= 5 → salta. 5 >= 10 → no salta.
 
 ---
 
-## Caso 37: SH
+## Caso 37: SH (Store Halfword)
 
 ### Descripción
-Store Halfword: M[addr](15:0) = R[rt](15:0)
+Store Halfword: toma los 16 bits bajos de R1 y los escribe en M[R2 + offset].
+R1 = 0x1234ABCD → halfword baja = 0xABCD → se guarda en M[0x50].
+En little-endian: CD en 0x50, AB en 0x51, 00 en 0x52-0x53.
 
 ### Instrucciones
 - SH r1, r2, 0
@@ -1611,26 +1613,31 @@ s r2 0x50
 s [0x0] 0x50820000
 
 01010 opcode (SH = 0x0A)
-00010 $2 (base)
-00001 $1 (dato, solo halfword baja)
+00010 $2 (base = 0x50)
+00001 $1 (dato, solo halfword baja = 0xABCD)
 0,0000,0000,0000,0000 (offset 0)
 
 0101, 0000, 1000, 0010, 0000, 0000, 0000, 0000
    5        0        8        2       0        0        0        0
 
 ### Postcondiciones
-x xw 0x50 1 → halfword baja = 0xABCD
+x /xw 0x50 1 → 0x0000ABCD
+(Word en 0x50 = 0x0000ABCD, halfword baja de R1 guardada en little-endian)
 
 ### Conclusiones
-SH guarda 16 bits bajos de $1. Verificar con: x xw 0x50 1
+SH guarda correctamente los 16 bits bajos de R1 en M[R2+0].
+0x1234ABCD → solo 0xABCD se escribe, 0x1234 se ignora.
+Comprobado con x /xw 0x50 1
+(Probado 2026-07-02, binario rtm32 v3)
 
 
 ---
 
-## Caso 38: SB
+## Caso 38: SB (Store Byte)
 
 ### Descripción
-Store Byte: M[addr](7:0) = R[rt](7:0)
+Store Byte: toma los 8 bits bajos de R1 y los escribe en M[R2 + offset].
+R1 = 0x41 (ASCII 'A') → se guarda en M[0x50].
 
 ### Instrucciones
 - SB r1, r2, 0
@@ -1644,18 +1651,21 @@ s r2 0x50
 s [0x0] 0x58820000
 
 01011 opcode (SB = 0x0B)
-00010 $2 (base)
-00001 $1 (dato)
+00010 $2 (base = 0x50)
+00001 $1 (dato, solo byte bajo = 0x41)
 0,0000,0000,0000,0000 (offset 0)
 
 0101, 1000, 1000, 0010, 0000, 0000, 0000, 0000
    5        8        8        2       0        0        0        0
 
 ### Postcondiciones
-x xb 0x50 4 → primer byte = 0x41 ('A')
+x /xb 0x50 1 → 0x41
+(Bye en 0x50 = 0x41, byte bajo de R1 guardado correctamente)
 
 ### Conclusiones
-SB guarda 1 byte. Verificar con: x xb 0x50 4
+SB guarda correctamente los 8 bits bajos de R1 en M[R2+0].
+0x41 (ASCII 'A') escrito en M[0x50].
+(Probado 2026-07-02, binario rtm32 v3)
 
 
 ---
@@ -1730,10 +1740,16 @@ Bug original: faltaba el `end` del case LHU en el decodificador, el flujo contin
 
 ---
 
-## Caso 41: LB
+## Caso 41: LB (Load Byte signed)
 
 ### Descripción
-Load Byte con sign-extend
+Load Byte con sign-extend: lee 1 byte de M[R2+0] y lo extiende con signo a 32 bits en R1.
+Si el bit 7 del byte es 1 (negativo) → rellena los 24 bits altos con 1s.
+Si el bit 7 es 0 (positivo) → rellena con 0s.
+
+Antes del fix de LHU (v3), LHU estaba roto y devolvía el mismo resultado que LB
+(sign-extend de 1 byte en vez de zero-extend de halfword). Con LHU corregido,
+LB mantiene su comportamiento correcto e independiente.
 
 ### Instrucciones
 - LB r1, r2, 0
@@ -1747,27 +1763,31 @@ s r2 0x50
 s [0x0] 0x70820000
 
 01110 opcode (LB = 0x0E)
-00010 $2
-00001 $1
-0,0000,0000,0000,0000
+00010 $2 (base = 0x50)
+00001 $1 (destino)
+0,0000,0000,0000,0000 (offset 0)
 
 0111, 0000, 1000, 0010, 0000, 0000, 0000, 0000
-   7        0        8        2        0        0        0        0
+   7        0        8        2       0        0        0        0
 
 ### Postcondiciones
 R 1: 0xFFFFFF80   R 2: 0x00000050
-Byte 0x80 → sign-extend → 0xFFFFFF80
+Byte 0x80 (bit 7=1 → negativo) → 0xFFFFFF80 (-128 decimal)
 
 ### Conclusiones
-LB: 0x80 es negativo → extiende con 1s. Resultado: 0xFFFFFF80.
+LB carga 1 byte y hace sign-extend correctamente.
+0x80 → 0xFFFFFF80 (24 bits altos en 1).
+(Probado 2026-07-02, binario rtm32 v3)
 
 
 ---
 
-## Caso 42: LBU
+## Caso 42: LBU (Load Byte Unsigned)
 
 ### Descripción
-Load Byte Unsigned (zero-extend)
+Load Byte Unsigned: lee 1 byte de M[R2+0] y hace zero-extend a 32 bits en R1.
+A diferencia de LB, los 24 bits altos siempre son 0 sin importar el bit 7.
+Contraste: mismo byte 0x80 → LB = 0xFFFFFF80, LBU = 0x00000080.
 
 ### Instrucciones
 - LBU r1, r2, 0
@@ -1781,19 +1801,21 @@ s r2 0x50
 s [0x0] 0x78820000
 
 01111 opcode (LBU = 0x0F)
-00010 $2
-00001 $1
-0,0000,0000,0000,0000
+00010 $2 (base = 0x50)
+00001 $1 (destino)
+0,0000,0000,0000,0000 (offset 0)
 
 0111, 1000, 1000, 0010, 0000, 0000, 0000, 0000
    7        8        8        2       0        0        0        0
 
 ### Postcondiciones
 R 1: 0x00000080   R 2: 0x00000050
-Byte 0x80 → zero-extend → 0x00000080
+Byte 0x80 → zero-extend → 0x00000080 (128 decimal)
 
 ### Conclusiones
-LBU: zero-extend, bits altos = 0. Resultado: 0x00000080.
+LBU carga 1 byte y hace zero-extend: bits altos = 0.
+LB vs LBU con 0x80: LB = 0xFFFFFF80, LBU = 0x00000080.
+(Probado 2026-07-02, binario rtm32 v3)
 
 
 ---
