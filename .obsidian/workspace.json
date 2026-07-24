@@ -6,7 +6,7 @@
       {
         "id": "d6f0e4fc4cac3024",
         "type": "tabs",
-        "dimension": 46.41833810888252,
+        "dimension": 52.66524520255864,
         "children": [
           {
             "id": "d087c4a24091b567",
@@ -65,7 +65,7 @@
       {
         "id": "a74280313710862d",
         "type": "tabs",
-        "dimension": 53.581661891117484,
+        "dimension": 47.33475479744137,
         "children": [
           {
             "id": "66eaf8120653193e",
@@ -79,18 +79,6 @@
               },
               "icon": "lucide-file",
               "title": "MIS_TESTS"
-            }
-          },
-          {
-            "id": "915ea83d70ef5ee2",
-            "type": "leaf",
-            "state": {
-              "type": "pdf",
-              "state": {
-                "file": "rtm32v3.pdf"
-              },
-              "icon": "lucide-file-text",
-              "title": "rtm32v3"
             }
           }
         ]
@@ -116,7 +104,7 @@
                 "autoReveal": false
               },
               "icon": "lucide-folder-closed",
-              "title": "Explorador de archivos"
+              "title": "Files"
             }
           },
           {
@@ -246,13 +234,13 @@
   },
   "left-ribbon": {
     "hiddenItems": {
-      "switcher:Abrir selector rápido": false,
-      "graph:Abrir vista gráfica": false,
-      "canvas:Crear nuevo lienzo": false,
-      "daily-notes:Abrir la nota de hoy": false,
-      "templates:Insertar plantilla": false,
-      "command-palette:Abrir paleta de comandos": false,
-      "bases:Crear nueva base": false
+      "switcher:Open quick switcher": false,
+      "graph:Open graph view": false,
+      "canvas:Create new canvas": false,
+      "daily-notes:Open today's daily note": false,
+      "templates:Insert template": false,
+      "command-palette:Open command palette": false,
+      "bases:Create new base": false
     }
   },
   "active": "fc04a09a83fdecde",
@@ -263,6 +251,8 @@
     "anotaciones clases.md",
     "tests/MIS_TESTS.md",
     "rtm32v3.pdf",
+    "README.md",
+    "tests/MIS_TESTS.md",
     "mostrar_h/explicacion_mostrar_h.md",
     "tests/README.md",
     "rtm32v2.pdf",
