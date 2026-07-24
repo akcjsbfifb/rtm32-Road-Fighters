@@ -14,12 +14,12 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "README.md",
+                "file": "anotaciones clases.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "README"
+              "title": "anotaciones clases"
             }
           },
           {
@@ -255,10 +255,13 @@
       "bases:Crear nueva base": false
     }
   },
-  "active": "d087c4a24091b567",
+  "active": "fc04a09a83fdecde",
   "lastOpenFiles": [
-    "tests/MIS_TESTS.md",
+    "rtm32-v4/rtm32.md",
+    "rtm32.md",
     "README.md",
+    "anotaciones clases.md",
+    "tests/MIS_TESTS.md",
     "rtm32v3.pdf",
     "mostrar_h/explicacion_mostrar_h.md",
     "tests/README.md",
