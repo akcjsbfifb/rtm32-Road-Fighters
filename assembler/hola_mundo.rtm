@@ -1,0 +1,86 @@
+.section ".data"
+	mensaje: .asciiz "Hola, mundo!"
+
+.section ".text"
+	// Elegimos un valor para inicializar el stack
+	addi $sp, $zero, 0xFFC
+
+	// Para llamar a `imprimir_asciiz` debemos cargar en $a0 un puntero
+	// al mensaje.  Un puntero es de 32 bits, por lo cual es imposible hacerlo
+	// con tan solo una instrucción.
+
+	// Hay dos formas de cargar un puntero.  La primera es usar las relocaciones
+	// .lo16 y .hi16 para cargarlo en dos pasos.  La segunda es bakear el puntero
+	// en el segmento de datos con `mensaje_ptr: .ptr mensaje` y cargar el puntero
+	// directamente con `lw $rt, mensaje_ptr($zero)`.
+
+	// Usamos la primer forma:
+	orh $a0, $zero, .hi16 mensaje
+	ori $a0, $a0,   .lo16 mensaje
+
+	jal imprimir_asciiz
+
+	// Debemos detener la ejecución del programa aquí.  De otro modo, el
+	// emulador volverá a avanzar hacia imprimir_asciiz.  No tenemos una
+	// instrucción HALT, pero si estamos corriendo la máquina con el debugger,
+	// podemos obtener el mismo ejemplo con una excepción:
+	trap 1
+	// ^ Esta excepción no está definida, por lo cual el debugger detendrá la
+	//   ejecución por nosotros con "Core Exception 6."
+
+// Hagamos una función "imprimir_asciiz"
+// Tomará en $a0 un puntero a la string que quiere imprimir
+imprimir_asciiz:
+	// Los registros $sX son callee-saved.  Es decir, si los usamos dentro
+	// de esta función, debemos restaurarlos a su valor original antes de
+	// salir.  Esto se suele hacer empujándolos y quitándolos del stack.
+	addi $sp, $sp, -12
+	sw $s0, 0($sp)		// guarda puntero al próximo caracter
+	sw $s1, 4($sp)		// guarda el caracter actual
+	sw $s2, 8($sp)		// guarda la dirección de la consola
+	// No hace falta empujar $ra porque no llamamos a ninguna derivada de JAL
+
+	// Al principio no leímos ningún caracter.  Establecemos $s0 al principio
+	// de la string, es decir, en $a0
+	addi $s0, $a0, 0
+
+	// Truco para guardar la dirección de la consola en una instrucción:
+	addi $s2, $zero, -0x100
+
+	// Procesamos los caracteres uno por uno
+imprimir_asciiz.bucle:
+	lbu $s1, 0($s0)
+
+	// Una string .asciiz termina cuando lleguemos a un byte cuyo valor es 0
+	beq $s1, $zero, imprimir_asciiz.salir
+
+	// Si llegamos acá, $s1 != 0, lo imprimimos:
+	sb $s1, 0($s2)
+
+	// Avanzamos el puntero, y la próxima vuelta procesamos el siguiente caracter:
+	addi $s0, $s0, 1
+	j imprimir_asciiz.bucle
+
+imprimir_asciiz.salir:
+	// Imprimamos tambien un salto de línea.  Nosotros estamos acostumbrados a
+	// escribirlos con '\n'.  Esto se conoce como "LF."  En RTM32, sin embargo,
+	// se usa "CRLF."  Es decir, debemos imprimir dos caracteres, '\r' y '\n',
+	// donde '\r' mueve el cursor hacia el borde izquierdo de la consola, y '\n'
+	// únicamente lo desplaza una celda hacia abajo sin restablecer la posición
+	// horizontal.
+
+	addi $s1, $zero, '\r'
+	sb $s1, 0($s2)
+
+	addi $s1, $zero, '\n'
+	sb $s1, 0($s2)
+
+	// Ahora sí, salimos de la función:
+	// Empujamos varias cosas al stack, debemos restaurarlas
+	lw $s0, 0($sp)
+	lw $s1, 4($sp)
+	lw $s2, 8($sp)
+	addi $sp, $sp, 12
+
+	// Ahora si, salimos de la función
+	jr $ra, 0
